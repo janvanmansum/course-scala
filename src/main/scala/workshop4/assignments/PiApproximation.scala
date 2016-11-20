@@ -58,9 +58,9 @@ object PiApproximation {
       case (Hits(successes, total), isSuccess) => Hits(successes + booleanToInt(isSuccess), total + 1)
     }
 
-    val piApprox: Observable[Double] = hits.drop(1).map { case Hits(s, t) => s.toDouble / t.toDouble }
+    val piApprox: Observable[Double] = hits.drop(999999).map { case Hits(s, t) => s.toDouble / t.toDouble }
 
-    val oneMillionApproximations: Observable[Double] = piApprox.drop(999998).take(1)
+    val oneMillionApproximations: Observable[Double] = piApprox.take(1)
 
     oneMillionApproximations.subscribe(p => println(p * 4), _.printStackTrace(), () => println("done"))
   }
