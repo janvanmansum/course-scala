@@ -45,20 +45,23 @@ object PiApproximation {
 
   def random: Observable[Double] = {
     Observable.defer(Observable.just(Random.nextDouble())).repeat
+    //Observable.just(Random.nextDouble()).repeat
   }
 
   def main(args: Array[String]): Unit = {
 
-    val groupsOfTwo: Observable[Seq[Double]] = ???
+    val groupsOfTwo: Observable[Seq[Double]] = Observable.defer(Observable.just(Seq(Random.nextDouble(), Random.nextDouble()))).repeat
 
-    val insideCircle: Observable[Boolean] = ???
+    val insideCircle: Observable[Boolean] = groupsOfTwo.map { case Seq(x, y) => { math.sqrt(x * x + y * y) <= 1.0} }
 
-    val hits: Observable[Hits] = ???
+    val hits: Observable[Hits] = insideCircle.scan(Hits.empty) {
+      case (Hits(successes, total), isSuccess) => Hits(successes + booleanToInt(isSuccess), total + 1)
+    }
 
-    val piApprox: Observable[Double] = ???
+    val piApprox: Observable[Double] = hits.drop(1).map { case Hits(s, t) => s.toDouble / t.toDouble }
 
-    val oneMillionApproximations: Observable[Double] = ???
+    val oneMillionApproximations: Observable[Double] = piApprox.drop(999998).take(1)
 
-    oneMillionApproximations.subscribe(println(_), _.printStackTrace(), () => println("done"))
+    oneMillionApproximations.subscribe(p => println(p * 4), _.printStackTrace(), () => println("done"))
   }
 }

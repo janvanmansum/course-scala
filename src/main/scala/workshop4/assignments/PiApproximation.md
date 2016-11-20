@@ -19,6 +19,9 @@ operators.
    in practice. Also try to understand what `Observable.defer` is doing; we haven't discussed it yet, but the documentation
    should give you some pointers. Check out what happens when we peel off the `Observable.defer`. **Hint:** this construction
    is equal to the [RxScala variant] of [`Observable.fromCallable`].
+   
+   - *Don't forget to recompile!*. Without `defer` the one value from the `just`-observable is *just* repeated.
+   
 2. In the `main` method, call `random` and make groups of 2 random numbers; this should yield an `Observable[Seq[Double]]`;
    allocate this to `groupsOfTwo`.
 3. Each group of 2 numbers (type `Seq[Boolean]`) represents the `x`- and `y`-coordinate of a single point respectively. Using
